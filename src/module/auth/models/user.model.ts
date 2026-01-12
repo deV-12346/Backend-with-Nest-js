@@ -15,6 +15,7 @@ interface User{
     avatar?: string | null ;
     otp?: number | null;
     otp_expiry?: Date | null;
+    isVerified: boolean;
     role: role_type
 }
   @Table({
@@ -41,6 +42,11 @@ export class UserModel extends Model<User> {
     @Column(DataType.STRING(15))
     mobile_number: string;
 
+    @AllowNull(false)
+    @Column(DataType.STRING(200))
+    password:string
+
+
     @AllowNull(true)
     @Column(DataType.STRING(200))
     coverimage: string | null;
@@ -56,6 +62,11 @@ export class UserModel extends Model<User> {
     @AllowNull(true)
     @Column(DataType.DATE)
     otp_expiry: Date | null;
+
+    @Default(false)
+    @AllowNull(false)
+    @Column(DataType.BOOLEAN)
+    isVerified:boolean;
 
     @Default(role_type.user)
     @AllowNull(false)
