@@ -16,7 +16,8 @@ interface User{
     otp?: number | null;
     otp_expiry?: Date | null;
     isVerified: boolean;
-    role: role_type
+    role: role_type;
+    refresh_token:string | null
 }
   @Table({
     tableName:"users",
@@ -72,4 +73,8 @@ export class UserModel extends Model<User> {
     @AllowNull(false)
     @Column(DataType.ENUM(...Object.values(role_type)))
     role: string;
+
+    @AllowNull(true)
+    @Column(DataType.STRING(200))
+    refresh_token: string | null
 }
