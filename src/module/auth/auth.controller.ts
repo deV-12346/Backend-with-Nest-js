@@ -1,22 +1,22 @@
-import { Body, Controller, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { FileFieldsInterceptor } from "@nestjs/platform-express"
+import {Body, Controller, Post, Res} from '@nestjs/common';
+import { LoginDto } from './dto/LoginUser.dto';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/Create-User.dto';
-import { multerOption } from '../utils/multer-options.util';
+import type { Response } from 'express';
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService){}
-    @Post('/register')
-    @UseInterceptors(FileFieldsInterceptor([
-     {name: 'coverimage', maxCount:1},
-     {name: 'avatar', maxCount:1}
-    ],multerOption))
-    RegisterUser(
-    @Body() body: CreateUserDto,
-    @UploadedFiles() files:{
-        coverimage? : Express.Multer.File[],
-        avatar?: Express.Multer.File[]
-    }){
-        return this.authService.RegisterUser(body,files)
+    constructor(private readonly authService:AuthService) {}
+    @Post("/login")
+    async Login(@Body() body:LoginDto,@Res({passthrough:true}) res: Response){
+        const { accessToken,refreshToken} = await this.authService.login(body)
+        const options = {
+            httpOnly:true,
+            secure:true
+        }
+        res.cookie('accessToken',accessToken,options)
+        res.cookie('refreshToken',refreshToken,options)
+        return {
+            success:true,
+            message:"Login Success"
+        }
     }
 }

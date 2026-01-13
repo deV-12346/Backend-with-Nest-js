@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { UserModel } from './module/auth/models/user.model';
+import { UserModel } from './module/user/models/user.model';
 import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class AppService {
-  constructor(){ }
-  SayHello(){
+  constructor() { }
+  SayHello() {
     return {
-      success:true,
-      message:"Hello from API"
+      success: true,
+      message: "Hello from API"
     }
   }
 }
